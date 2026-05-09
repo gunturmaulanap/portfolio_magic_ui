@@ -1,7 +1,15 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion, type MotionValue, useMotionValue, useSpring, useTransform } from "motion/react";
+import {
+  LazyMotion,
+  domAnimation,
+  m,
+  type MotionValue,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "motion/react";
 import { createContext, useContext, useRef, type ReactNode } from "react";
 
 interface DockProps {
@@ -31,18 +39,28 @@ interface DockContextValue {
 
 const DockContext = createContext<DockContextValue | null>(null);
 
-const Dock = ({ className, children, magnification = DEFAULT_MAGNIFICATION, distance = DEFAULT_DISTANCE }: DockProps) => {
+const Dock = ({
+  className,
+  children,
+  magnification = DEFAULT_MAGNIFICATION,
+  distance = DEFAULT_DISTANCE,
+}: DockProps) => {
   const mouseX = useMotionValue(Infinity);
 
   return (
     <DockContext.Provider value={{ mouseX, magnification, distance }}>
-      <motion.div
-        onMouseMove={(e) => mouseX.set(e.pageX)}
-        onMouseLeave={() => mouseX.set(Infinity)}
-        className={cn("mx-auto w-max h-full flex items-end justify-center overflow-visible rounded-full border", className)}
-      >
-        {children}
-      </motion.div>
+      <LazyMotion features={domAnimation}>
+        <m.div
+          onMouseMove={(e) => mouseX.set(e.pageX)}
+          onMouseLeave={() => mouseX.set(Infinity)}
+          className={cn(
+            "mx-auto w-max h-full flex items-end justify-center overflow-visible rounded-full border",
+            className
+          )}
+        >
+          {children}
+        </m.div>
+      </LazyMotion>
     </DockContext.Provider>
   );
 };
@@ -63,27 +81,40 @@ const DockIcon = ({ className, children }: DockIconProps) => {
   });
 
   const containerSize = useSpring(
-    useTransform(distanceCalc, [-distance, 0, distance], [BASE_SIZE, magnification, BASE_SIZE]),
+    useTransform(
+      distanceCalc,
+      [-distance, 0, distance],
+      [BASE_SIZE, magnification, BASE_SIZE]
+    ),
     SPRING
   );
   const iconSize = useSpring(
-    useTransform(distanceCalc, [-distance, 0, distance], [BASE_ICON_SIZE, magnification * ICON_SIZE_RATIO, BASE_ICON_SIZE]),
+    useTransform(
+      distanceCalc,
+      [-distance, 0, distance],
+      [BASE_ICON_SIZE, magnification * ICON_SIZE_RATIO, BASE_ICON_SIZE]
+    ),
     SPRING
   );
 
   return (
-    <motion.div
-      ref={ref}
-      style={{ width: containerSize, height: containerSize }}
-      className={cn("relative flex aspect-square items-center justify-center rounded-full shrink-0", className)}
-    >
-      <motion.div
-        style={{ width: iconSize, height: iconSize }}
-        className="flex items-center justify-center"
+    <LazyMotion features={domAnimation}>
+      <m.div
+        ref={ref}
+        style={{ width: containerSize, height: containerSize }}
+        className={cn(
+          "relative flex aspect-square items-center justify-center rounded-full shrink-0",
+          className
+        )}
       >
-        {children}
-      </motion.div>
-    </motion.div>
+        <m.div
+          style={{ width: iconSize, height: iconSize }}
+          className="flex items-center justify-center"
+        >
+          {children}
+        </m.div>
+      </m.div>
+    </LazyMotion>
   );
 };
 

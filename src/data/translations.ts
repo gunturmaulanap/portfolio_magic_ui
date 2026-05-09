@@ -2,9 +2,10 @@ export const translations = {
   id: {
     personal: {
       description:
-        "Full-Stack Developer dengan pengalaman lebih dari 2 tahun membangun dan mengirimkan aplikasi web produksi di berbagai platform e-commerce, enterprise resource planning, dan SaaS. Mahir dalam Go, Java (Spring Boot), React.js, Next.js, Node.js, Laravel, dan Flutter, dengan fondasi kuat dalam desain RESTful API, arsitektur database relasional, dan deployment terkontainer. Rekam jejak dalam memberikan solusi end-to-end lengkap secara mandiri dan dalam tim Agile/Scrum — mulai dari analisis requirement dan arsitektur sistem hingga deployment CI/CD di infrastruktur Linux.",
+        "Fullstack Developer dari Yogyakarta. Membangun sistem produksi menggunakan Go, React, Next.js, dan Laravel — dari desain API hingga deployment.",
+
       summary:
-        "Saya Guntur, seorang Fullstack Developer yang berbasis di Yogyakarta. Saya membangun sistem produksi — bukan proyek sampingan. Selama dua tahun terakhir, saya telah mengirimkan platform perekrutan berbasis video dengan upload AWS S3 yang dapat dilanjutkan, sistem e-commerce untuk brand FMCG yang sudah live dan bertransaksi, dashboard penjualan real-time yang melacak agen lapangan di berbagai cabang, dan POS yang dibangun ulang dari nol yang digunakan distributor setiap hari. Stack saya mengandalkan Go dan React — saya menangani semuanya mulai dari desain API dan arsitektur database hingga deployment di server Linux dengan Docker dan Nginx. Saya telah bekerja di startup, grup enterprise, dan kontrak freelance jangka panjang secara bersamaan. Jika Anda membutuhkan seseorang yang dapat mengambil requirement bisnis dari whiteboard ke produksi tanpa pengawasan, mari berbicara.",
+        "Saya membangun sistem yang benar-benar berjalan di production. Go untuk backend, React untuk frontend, Docker untuk deployment — dan cukup paham arsitektur untuk desain database-nya juga. Dua tahun terakhir: platform e-commerce, sistem rekrutmen, dashboard penjualan, dan POS yang dipakai bisnis nyata setiap hari. Saat ini bekerja di dua perusahaan sekaligus sambil mengelola kontrak freelance jangka panjang. Kalau butuh developer yang beneran deliver, mari ngobrol.",
     },
     nav: {
       home: "Beranda",

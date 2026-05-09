@@ -60,8 +60,9 @@ const BlurFadeText = ({
             hidden: { y: -yOffset, opacity: 0, filter: "blur(8px)" },
             visible: { y: 0, opacity: 1, filter: "blur(0px)" },
           };
+          const charKey = `${i}-${char.codePointAt(0) ?? "space"}`;
           return (
-            <LazyMotion features={domAnimation} key={`${char}-${i}`}>
+            <LazyMotion features={domAnimation} key={charKey}>
               <m.span
                 initial={!hasAnimated.current ? "hidden" : false}
                 animate="visible"

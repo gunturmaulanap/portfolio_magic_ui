@@ -21,9 +21,9 @@ export const DATA = {
   location: "Yogyakarta, Indonesia",
   locationLink: "https://www.google.com/maps/place/yogyakarta",
   description:
-    "Full-Stack Developer with 2+ years of hands-on experience building and shipping production-grade web applications across e-commerce, enterprise resource planning, and SaaS platforms. Proficient in Go, Java (Spring Boot), React.js, Next.js, Node.js, Laravel, and Flutter, with strong fundamentals in RESTful API design, relational database architecture, and containerized deployment. Track record of delivering complete end-to-end solutions independently and within Agile/Scrum teams — from requirements analysis and system architecture through CI/CD deployment on Linux infrastructure.",
+    "Fullstack Developer from Yogyakarta. I build production systems using Go, React, Next.js, and Laravel — from API design to deployment.",
   summary:
-    "I'm Guntur, a Fullstack Developer based in Yogyakarta. I build production systems — not side projects. Over the past two years I've shipped a video-based hiring platform with resumable AWS S3 uploads, an e-commerce system for an FMCG brand that's live and transacting, a real-time sales dashboard tracking field agents across multiple branches, and a POS rebuilt from scratch that a distributor runs daily. My stack leans on Go and React — I handle everything from API design and database architecture to deployment on Linux servers with Docker and Nginx. I've worked across startups, enterprise groups, and long-term freelance contracts simultaneously. If you need someone who can take a business requirement from whiteboard to production without hand-holding, let's talk.",
+    "I build systems that actually run in production. Go on the backend, React on the front, Docker for deployment — and enough context to design the database too. Two years in: e-commerce platforms, recruitment systems, sales dashboards, and a POS that a real business runs daily. Currently working across two companies while maintaining a long-term freelance contract. If you need someone who ships, let's talk.",
   avatarUrl: "/me.png",
   skills: [
     { name: "React", icon: ReactLight },

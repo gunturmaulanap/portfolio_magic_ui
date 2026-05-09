@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Accordion,
   AccordionContent,
@@ -21,32 +21,25 @@ function LogoImage({
   srcDark?: string;
   alt: string;
 }) {
-  const [imageError, setImageError] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const { theme, systemTheme } = useTheme();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Avoid hydration mismatch by only using theme after mounted
-  const currentTheme = mounted ? (theme === "system" ? systemTheme : theme) : undefined;
-  const isDark = currentTheme === "dark";
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   const imageSrc = isDark && srcDark ? srcDark : src;
 
-  if (!imageSrc || imageError) {
+  if (!imageSrc) {
     return (
       <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none" />
     );
   }
 
   return (
-    <img
+    <Image
       src={imageSrc}
       alt={alt}
+      width={40}
+      height={40}
+      unoptimized
       className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
-      onError={() => setImageError(true)}
     />
   );
 }
@@ -71,10 +64,10 @@ export default function WorkSection() {
                 <div className="flex-1 min-w-0 gap-0.5 flex flex-col">
                   <div className="font-semibold leading-none flex items-center gap-2">
                     {work.company}
-                    <span className="relative inline-flex items-center w-3.5 h-3.5">
+                    <span className="relative inline-flex items-center size-3.5">
                       <ChevronRight
                         className={cn(
-                          "absolute h-3.5 w-3.5 shrink-0 text-muted-foreground stroke-2 transition-all duration-300 ease-out",
+                          "absolute size-3.5 shrink-0 text-muted-foreground stroke-2 transition-all duration-300 ease-out",
                           "translate-x-0 opacity-0",
                           "group-hover:translate-x-1 group-hover:opacity-100",
                           "group-data-[state=open]:opacity-0 group-data-[state=open]:translate-x-0"
@@ -82,7 +75,7 @@ export default function WorkSection() {
                       />
                       <ChevronDown
                         className={cn(
-                          "absolute h-3.5 w-3.5 shrink-0 text-muted-foreground stroke-2 transition-all duration-200",
+                          "absolute size-3.5 shrink-0 text-muted-foreground stroke-2 transition-all duration-200",
                           "opacity-0 rotate-0",
                           "group-data-[state=open]:opacity-100 group-data-[state=open]:rotate-180"
                         )}
@@ -109,4 +102,3 @@ export default function WorkSection() {
     </Accordion>
   );
 }
-

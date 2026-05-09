@@ -5,7 +5,6 @@ import {
   LazyMotion,
   domAnimation,
   m,
-  motion,
   useInView,
   useReducedMotion,
   Variants,
