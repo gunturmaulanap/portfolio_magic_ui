@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { motion, Variants } from "motion/react";
-import { useMemo } from "react";
+import { useMemo, useRef, useEffect } from "react";
 
 interface BlurFadeTextProps {
   text: string;
@@ -33,6 +33,12 @@ const BlurFadeText = ({
   };
   const combinedVariants = variant || defaultVariants;
   const characters = useMemo(() => Array.from(text), [text]);
+  const hasAnimated = useRef(false);
+
+  // Mark as animated after first render
+  useEffect(() => {
+    hasAnimated.current = true;
+  }, []);
 
   if (animateByCharacter) {
     return (
@@ -45,7 +51,7 @@ const BlurFadeText = ({
           return (
             <motion.span
               key={i}
-              initial="hidden"
+              initial={!hasAnimated.current ? "hidden" : false}
               animate="visible"
               variants={charVariants}
               transition={{
@@ -67,7 +73,7 @@ const BlurFadeText = ({
   return (
     <div className="flex">
       <motion.span
-        initial="hidden"
+        initial={!hasAnimated.current ? "hidden" : false}
         animate="visible"
         variants={combinedVariants}
         transition={{
