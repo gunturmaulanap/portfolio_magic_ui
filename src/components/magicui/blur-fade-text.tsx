@@ -35,9 +35,14 @@ const BlurFadeText = ({
   const characters = useMemo(() => Array.from(text), [text]);
   const hasAnimated = useRef(false);
 
-  // Mark as animated after first render
+  // Mark as animated after first render with proper cleanup
   useEffect(() => {
     hasAnimated.current = true;
+
+    // Cleanup function to reset on unmount
+    return () => {
+      hasAnimated.current = false;
+    };
   }, []);
 
   if (animateByCharacter) {

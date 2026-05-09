@@ -43,7 +43,7 @@ export const DATA = {
   ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
-    { href: "/blog", icon: NotebookIcon, label: "Blog" },
+    // { href: "/blog", icon: NotebookIcon, label: "Blog" },
   ],
   contact: {
     email: "gunturmaulanaputraprojo@gmail.com",
@@ -70,12 +70,12 @@ export const DATA = {
 
       //   navbar: true,
       // },
-      Thread: {
-        name: "Thread",
-        url: "https://www.thread.net/@gunturmaulana_p",
-        icon: Icons.thread,
-        navbar: true,
-      },
+      // Thread: {
+      //   name: "Thread",
+      //   url: "https://www.thread.net/@gunturmaulana_p",
+      //   icon: Icons.thread,
+      //   navbar: true,
+      // },
       Whatsapp: {
         name: "Whatsapp",
         url: "https://wa.me/6281392854911",

@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Markdown from "react-markdown";
 
 function ProjectImage({ src, alt }: { src: string; alt: string }) {
@@ -21,6 +21,58 @@ function ProjectImage({ src, alt }: { src: string; alt: string }) {
       alt={alt}
       className="w-full h-48 object-cover"
       onError={() => setImageError(true)}
+    />
+  );
+}
+
+function ProjectVideo({ src }: { src: string }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (videoRef.current) {
+            videoRef.current.play().catch(() => {
+              // Auto-play was prevented, browser requires user interaction
+              console.log("Video autoplay prevented, user interaction required");
+            });
+          }
+        } else {
+          setIsVisible(false);
+          if (videoRef.current) {
+            videoRef.current.pause();
+          }
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "50px"
+      }
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      if (videoRef.current) {
+        observer.unobserve(videoRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      loop
+      muted
+      playsInline
+      className="w-full h-48 object-cover"
+      controls={false}
     />
   );
 }
@@ -69,14 +121,7 @@ export function ProjectCard({
           className="block"
         >
           {video ? (
-            <video
-              src={video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-48 object-cover"
-            />
+            <ProjectVideo src={video} />
           ) : image ? (
             <ProjectImage src={image} alt={title} />
           ) : (

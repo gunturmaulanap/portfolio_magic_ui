@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { translations, Language } from "@/data/translations";
 
 type LanguageContextType = {
@@ -14,25 +14,43 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("id"); // Default to Indonesian
   const [mounted, setMounted] = useState(false);
+  const isMountedRef = useRef(false);
 
   useEffect(() => {
-    // Load saved language from localStorage first
-    const saved = localStorage.getItem("language") as Language;
-    if (saved && (saved === "id" || saved === "en")) {
-      setLanguageState(saved);
+    isMountedRef.current = true;
+
+    try {
+      // Load saved language from localStorage with error handling
+      const saved = localStorage.getItem("language") as Language;
+      if (isMountedRef.current && saved && (saved === "id" || saved === "en")) {
+        setLanguageState(saved);
+      }
+    } catch (error) {
+      // Handle localStorage errors (private browsing, quota exceeded, etc.)
+      console.warn("Failed to read language from localStorage:", error);
+      // Keep default language if localStorage fails
+    } finally {
+      // Mark as mounted regardless of localStorage success
+      if (isMountedRef.current) {
+        setMounted(true);
+      }
     }
-    // Then mark as mounted
-    setMounted(true);
+
+    // Cleanup function
+    return () => {
+      isMountedRef.current = false;
+    };
   }, []);
 
-  // Defer localStorage write to prevent blocking UI
+  // Synchronous localStorage write for instant response
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
-    // Defer localStorage write using requestIdleCallback or setTimeout
-    if (typeof requestIdleCallback !== 'undefined') {
-      requestIdleCallback(() => localStorage.setItem("language", lang));
-    } else {
-      setTimeout(() => localStorage.setItem("language", lang), 0);
+
+    // Safe localStorage write with error handling (synchronous for instant response)
+    try {
+      localStorage.setItem("language", lang);
+    } catch (error) {
+      console.warn("Failed to save language to localStorage:", error);
     }
   }, []);
 
