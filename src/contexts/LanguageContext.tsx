@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { createContext, use, useState, useEffect, useMemo, useCallback } from "react";
 import { translations, Language } from "@/data/translations";
 
 type LanguageContextType = {
@@ -13,10 +13,10 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("id"); // Default to Indonesian
-  const isClientRef = useRef(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    isClientRef.current = true;
+    setMounted(true);
 
     try {
       // Load saved language from localStorage with error handling
@@ -52,9 +52,14 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [language, setLanguage, t]
   );
 
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <LanguageContext.Provider value={contextValue}>
-      {isClientRef.current ? children : null}
+      {children}
     </LanguageContext.Provider>
   );
 }

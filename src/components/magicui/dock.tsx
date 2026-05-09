@@ -10,7 +10,7 @@ import {
   useSpring,
   useTransform,
 } from "motion/react";
-import { createContext, useContext, useRef, type ReactNode } from "react";
+import { createContext, use, useRef, type ReactNode } from "react";
 
 interface DockProps {
   className?: string;
@@ -67,7 +67,7 @@ const Dock = ({
 
 const DockIcon = ({ className, children }: DockIconProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const context = useContext(DockContext);
+  const context = use(DockContext);
 
   if (!context) {
     throw new Error("DockIcon must be used within a Dock component");
@@ -119,4 +119,3 @@ const DockIcon = ({ className, children }: DockIconProps) => {
 };
 
 export { Dock, DockIcon };
-export type { DockProps, DockIconProps };
