@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import Image from "next/image";
 import { DATA } from "@/data/resume";
 import {
   Timeline,
@@ -38,7 +39,7 @@ export default function HackathonsSection() {
             <div className="flex-1 h-px bg-linear-to-l from-transparent from-5% via-border via-95% to-transparent" />
           </div>
           <div className="flex flex-col gap-y-3 items-center justify-center">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+            <h2 className="text-3xl font-semibold tracking-tighter sm:text-4xl">
               I like building things
             </h2>
             <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
@@ -58,9 +59,12 @@ export default function HackathonsSection() {
             >
               <TimelineConnectItem className="flex items-start justify-center">
                 {hackathon.image ? (
-                  <img
+                  <Image
                     src={hackathon.image}
                     alt={hackathon.title}
+                    width={40}
+                    height={40}
+                    unoptimized
                     className="size-10 bg-card z-10 shrink-0 overflow-hidden p-1 border rounded-full shadow ring-2 ring-border object-contain flex-none"
                   />
                 ) : (
@@ -90,10 +94,10 @@ export default function HackathonsSection() {
                 )}
                 {hackathon.links && hackathon.links.length > 0 && (
                   <div className="mt-1 flex flex-row flex-wrap items-start gap-2">
-                    {hackathon.links.map((link, idx) => (
+                    {hackathon.links.map((link) => (
                       <Link
                         href={link.href}
-                        key={idx}
+                        key={`${hackathon.title}-${link.href}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

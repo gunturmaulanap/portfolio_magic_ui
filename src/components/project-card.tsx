@@ -5,43 +5,43 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { useRef, useEffect } from "react";
 import Markdown from "react-markdown";
 
 function ProjectImage({ src, alt }: { src: string; alt: string }) {
-  const [imageError, setImageError] = useState(false);
-
-  if (!src || imageError) {
+  if (!src) {
     return <div className="w-full h-48 bg-muted" />;
   }
 
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
+      width={640}
+      height={192}
+      unoptimized
       className="w-full h-48 object-cover"
-      onError={() => setImageError(true)}
     />
   );
 }
 
 function ProjectVideo({ src }: { src: string }) {
-  const [isVisible, setIsVisible] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
           if (videoRef.current) {
             videoRef.current.play().catch(() => {
               // Auto-play was prevented, browser requires user interaction
-              console.log("Video autoplay prevented, user interaction required");
+              console.log(
+                "Video autoplay prevented, user interaction required"
+              );
             });
           }
         } else {
-          setIsVisible(false);
           if (videoRef.current) {
             videoRef.current.pause();
           }
@@ -49,7 +49,7 @@ function ProjectVideo({ src }: { src: string }) {
       },
       {
         threshold: 0.1,
-        rootMargin: "50px"
+        rootMargin: "50px",
       }
     );
 
@@ -130,16 +130,16 @@ export function ProjectCard({
         </Link>
         {links && links.length > 0 && (
           <div className="absolute top-2 right-2 flex flex-wrap gap-2">
-            {links.map((link, idx) => (
+            {links.map((link) => (
               <Link
                 href={link.href}
-                key={idx}
+                key={`${title}-${link.type}-${link.href}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
               >
                 <Badge
-                  className="flex items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90"
+                  className="flex items-center gap-1.5 text-xs bg-gray-950 text-white hover:bg-gray-900"
                   variant="default"
                 >
                   {link.icon}
@@ -163,7 +163,7 @@ export function ProjectCard({
             className="text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
             aria-label={`Open ${title}`}
           >
-            <ArrowUpRight className="h-4 w-4" aria-hidden />
+            <ArrowUpRight className="size-4" aria-hidden />
           </Link>
         </div>
         <div className="text-xs flex-1 prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">

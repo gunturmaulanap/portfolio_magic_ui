@@ -1,7 +1,13 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion, Variants } from "motion/react";
+import {
+  LazyMotion,
+  domAnimation,
+  m,
+  useReducedMotion,
+  Variants,
+} from "motion/react";
 import { useMemo, useRef, useEffect } from "react";
 
 interface BlurFadeTextProps {
@@ -34,6 +40,7 @@ const BlurFadeText = ({
   const combinedVariants = variant || defaultVariants;
   const characters = useMemo(() => Array.from(text), [text]);
   const hasAnimated = useRef(false);
+  const prefersReducedMotion = useReducedMotion();
 
   // Mark as animated after first render with proper cleanup
   useEffect(() => {
@@ -54,21 +61,22 @@ const BlurFadeText = ({
             visible: { y: 0, opacity: 1, filter: "blur(0px)" },
           };
           return (
-            <motion.span
-              key={i}
-              initial={!hasAnimated.current ? "hidden" : false}
-              animate="visible"
-              variants={charVariants}
-              transition={{
-                duration,
-                delay: delay + i * characterDelay,
-                ease: "easeOut",
-              }}
-              className={cn("inline-block", className)}
-              style={{ width: char.trim() === "" ? "0.2em" : "auto" }}
-            >
-              {char}
-            </motion.span>
+            <LazyMotion features={domAnimation} key={`${char}-${i}`}>
+              <m.span
+                initial={!hasAnimated.current ? "hidden" : false}
+                animate="visible"
+                variants={charVariants}
+                transition={{
+                  duration: prefersReducedMotion ? 0 : duration,
+                  delay: delay + i * characterDelay,
+                  ease: "easeOut",
+                }}
+                className={cn("inline-block", className)}
+                style={{ width: char.trim() === "" ? "0.2em" : "auto" }}
+              >
+                {char}
+              </m.span>
+            </LazyMotion>
           );
         })}
       </div>
@@ -77,19 +85,21 @@ const BlurFadeText = ({
 
   return (
     <div className="flex">
-      <motion.span
-        initial={!hasAnimated.current ? "hidden" : false}
-        animate="visible"
-        variants={combinedVariants}
-        transition={{
-          duration,
-          delay,
-          ease: "easeOut",
-        }}
-        className={cn("inline-block", className)}
-      >
-        {text}
-      </motion.span>
+      <LazyMotion features={domAnimation}>
+        <m.span
+          initial={!hasAnimated.current ? "hidden" : false}
+          animate="visible"
+          variants={combinedVariants}
+          transition={{
+            duration: prefersReducedMotion ? 0 : duration,
+            delay,
+            ease: "easeOut",
+          }}
+          className={cn("inline-block", className)}
+        >
+          {text}
+        </m.span>
+      </LazyMotion>
     </div>
   );
 };

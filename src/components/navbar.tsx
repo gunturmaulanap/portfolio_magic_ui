@@ -49,13 +49,15 @@ export default function Navbar() {
           orientation="vertical"
           className="h-2/3 m-auto w-px bg-border"
         />
-        {Object.entries(DATA.contact.social)
-          .filter(([_, social]) => social.navbar)
-          .map(([name, social], index) => {
+        {(() => {
+          const socialNavbarItems: React.ReactNode[] = [];
+          for (const [name, social] of Object.entries(DATA.contact.social)) {
+            if (!social.navbar) continue;
             const isExternal = social.url.startsWith("http");
             const IconComponent = social.icon;
-            return (
-              <Tooltip key={`social-${name}-${index}`}>
+
+            socialNavbarItems.push(
+              <Tooltip key={`social-${name}`}>
                 <TooltipTrigger asChild>
                   <a
                     href={social.url}
@@ -77,7 +79,9 @@ export default function Navbar() {
                 </TooltipContent>
               </Tooltip>
             );
-          })}
+          }
+          return socialNavbarItems;
+        })()}
         <Separator
           orientation="vertical"
           className="h-2/3 m-auto w-px bg-border"

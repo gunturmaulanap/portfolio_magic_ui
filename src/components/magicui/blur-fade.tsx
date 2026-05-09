@@ -1,6 +1,15 @@
 "use client";
 
-import { AnimatePresence, motion, useInView, Variants } from "motion/react";
+import {
+  AnimatePresence,
+  LazyMotion,
+  domAnimation,
+  m,
+  motion,
+  useInView,
+  useReducedMotion,
+  Variants,
+} from "motion/react";
 import { useRef } from "react";
 
 interface BlurFadeProps {
@@ -29,9 +38,10 @@ const BlurFade = ({
   blur = "6px",
 }: BlurFadeProps) => {
   const ref = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
   const inViewResult = useInView(ref, {
     once: true,
-    ...(inViewMargin ? { margin: inViewMargin as any } : {})
+    ...(inViewMargin ? { margin: inViewMargin as any } : {}),
   });
   const isInView = !inView || inViewResult;
   const defaultVariants: Variants = {
@@ -40,23 +50,25 @@ const BlurFade = ({
   };
   const combinedVariants = variant || defaultVariants;
   return (
-    <AnimatePresence>
-      <motion.div
-        ref={ref}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        exit="hidden"
-        variants={combinedVariants}
-        transition={{
-          delay: 0.04 + delay,
-          duration,
-          ease: "easeOut",
-        }}
-        className={className}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <LazyMotion features={domAnimation}>
+      <AnimatePresence>
+        <m.div
+          ref={ref}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          exit="hidden"
+          variants={combinedVariants}
+          transition={{
+            delay: 0.04 + delay,
+            duration: prefersReducedMotion ? 0 : duration,
+            ease: "easeOut",
+          }}
+          className={className}
+        >
+          {children}
+        </m.div>
+      </AnimatePresence>
+    </LazyMotion>
   );
 };
 
