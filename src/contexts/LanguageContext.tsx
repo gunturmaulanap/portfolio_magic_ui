@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { createContext, use, useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { translations, Language } from "@/data/translations";
 
 type LanguageContextType = {
@@ -13,33 +13,22 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("id"); // Default to Indonesian
-  const [mounted, setMounted] = useState(false);
-  const isMountedRef = useRef(false);
+  const isClientRef = useRef(false);
 
   useEffect(() => {
-    isMountedRef.current = true;
+    isClientRef.current = true;
 
     try {
       // Load saved language from localStorage with error handling
       const saved = localStorage.getItem("language") as Language;
-      if (isMountedRef.current && saved && (saved === "id" || saved === "en")) {
+      if (saved && (saved === "id" || saved === "en")) {
         setLanguageState(saved);
       }
     } catch (error) {
       // Handle localStorage errors (private browsing, quota exceeded, etc.)
       console.warn("Failed to read language from localStorage:", error);
       // Keep default language if localStorage fails
-    } finally {
-      // Mark as mounted regardless of localStorage success
-      if (isMountedRef.current) {
-        setMounted(true);
-      }
     }
-
-    // Cleanup function
-    return () => {
-      isMountedRef.current = false;
-    };
   }, []);
 
   // Synchronous localStorage write for instant response
@@ -63,20 +52,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [language, setLanguage, t]
   );
 
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return null;
-  }
-
   return (
     <LanguageContext.Provider value={contextValue}>
-      {children}
+      {isClientRef.current ? children : null}
     </LanguageContext.Provider>
   );
 }
 
 export function useLanguage() {
-  const context = useContext(LanguageContext);
+  const context = use(LanguageContext);
   if (context === undefined) {
     throw new Error("useLanguage must be used within a LanguageProvider");
   }

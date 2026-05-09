@@ -40,7 +40,7 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="min-h-screen flex items-center justify-center bg-background p-6">
           <div className="max-w-md w-full text-center space-y-6">
             <div className="space-y-2">
-              <h1 className="text-4xl font-bold text-foreground">Oops!</h1>
+              <h1 className="text-4xl font-semibold text-foreground">Oops!</h1>
               <p className="text-muted-foreground">
                 Something went wrong. Please try refreshing the page.
               </p>
